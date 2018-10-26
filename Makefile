@@ -1,4 +1,4 @@
-prog: main.cpp CMatrix.cpp
+prog: main.cpp CMatrix.cpp CMatrix.h
 	g++ -std=c++11 -g -O0 -Wall -fPIC CMatrix.cpp main.cpp -o prog
 
 .PHONY: clean

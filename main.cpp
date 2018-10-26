@@ -3,8 +3,8 @@
 
 using namespace std;
 
-#define R 3
-#define C 3
+#define R 4
+#define C 5
 
 CMatrix make_matrix()
 {
@@ -15,45 +15,45 @@ CMatrix make_matrix()
     return m;
 }
 
+void triangulate(CMatrix& A)
+{
+    int num_rows = A.getRowNum();
+    for (int org_row = 0; org_row < num_rows - 1; org_row++)
+    {
+        CMatrix row_pivot = A.extractRow(org_row);
+        for (int i = org_row + 1; i < num_rows; i++)
+        {
+            CMatrix r = A.extractRow(i);
+            float pivot = A.getElement(i, org_row) / A.getElement(org_row, org_row);
+            CMatrix row_pivot_multiple = row_pivot * pivot;
+            r -= row_pivot_multiple;
+
+            A.setRow(i, r);
+        }
+    }
+}
+
 int main()
 {
-    // CMatrix m1 = make_matrix();
-    // CMatrix m2(R, C);
-    // m2 = make_matrix();
     CMatrix A(R,C);
     // float ar[R*C] = { 1, 2
     //                 , 3, 4};
-    float ar1[R*C] = { 1, 2, 3
-                     , 4, 5, 6
-                     , 7, 8, 9};
-    A.add(ar1, R*C);
-    CMatrix U(R,C);
+    // float ar1[R*C] = { 1, 2, 3
+    //                  , 1, 4, 6
+    //                  , 1, 6, 10};
+    // float ar2[R*C] = { 1, 2, 3, 4
+    //                  , 1, 4, 6, 8
+    //                  , 1, 6, 10, 15
+    //                  , 1, 10, 11, 30
+    //                  };
+    float ar3aug[R*C] = { 1, 2, 3, 4, 100
+                     , 1, 4, 6, 8, 200
+                     , 1, 6, 10, 15, 300
+                     , 1, 10, 11, 30, 400
+                     };
+    A.add(ar3aug, R*C);
 
-    // Step 1
-    for (int org_row = 0; org_row < R - 1; org_row++)
-    {
-        CMatrix row_pivot = A.extractRow(org_row);
-        U.setRow(org_row, row_pivot);
-        for (int i = org_row + 1; i < R; i++)
-        {
-            CMatrix r = A.extractRow(i);
-            CMatrix row_pivot_multiple = row_pivot * (A.getElement(i, 0) / A.getElement(org_row, 0));
-            r -= row_pivot_multiple;
+    triangulate(A);
 
-            U.setRow(i, r);
-            cout << U << endl;
-        }
-    }
-
-    
-    // CMatrix row1 = a.extractRow(1);
-    // cout << "Res: " << row0.getByIndex(1) << endl;
-    // row0 *= 3;
-    // cout << "Res: " << row0.getByIndex(1) << endl;
-
-    // cout << m3.getByIndex(5) << endl;
-    // cout << m1.getByIndex(5) << endl;
-    // m1.setByIndex(5, 10);
-    // cout << m1.getByIndex(5) << endl;
-    // cout << m2.getByIndex(5) << endl;
+    cout << A << endl;
 }

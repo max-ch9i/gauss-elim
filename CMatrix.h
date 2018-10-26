@@ -7,10 +7,10 @@ class CMatrix : public Matrix
     public:
         CMatrix(int nr, int nc):sr(nr),sc(nc),elements(new float[sr*sc]())
         {
-            std::cout << "CONSTRUCT " << std::endl;
+            // std::cout << "CONSTRUCT " << std::endl;
         };
         ~CMatrix() {
-            std::cout << "DESTRUCT " << std::endl;
+            // std::cout << "DESTRUCT " << std::endl;
             delete[] elements;
         };
         void add(float e) { if(pointer + 1 <= sr*sc) elements[pointer++] = e; };
@@ -27,6 +27,7 @@ class CMatrix : public Matrix
         float getElement(int r, int c) { return elements[sc * r + c]; };
         int getSize() const { return sr*sc; };
         int getColNum() const { return sc; };
+        int getRowNum() const { return sr; };
         void setByIndex(int i, float e) { if(i < sr*sc) elements[i] = e; };
         void setRow(int rn, const CMatrix& m) {
             if (m.sr > 1)
