@@ -1,4 +1,4 @@
-#include "CMatrix.h"
+#include "CMatrix.hpp"
 
 std::ostream& operator<<(std::ostream& os, const CMatrix& m) { 
     for (int i = 0; i < m.getSize(); i++)

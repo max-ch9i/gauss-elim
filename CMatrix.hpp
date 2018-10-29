@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Matrix.h"
+#include "Matrix.hpp"
 
 class CMatrix : public Matrix
 {
@@ -77,6 +77,17 @@ class CMatrix : public Matrix
             std::cout << "COPY ASSIGN" << std::endl;
             return *this;
         };
+        bool operator!=(const float* ar)
+        {
+            for (int i = 0; i < sr*sc;i++)
+            {
+                if (ar[i] != elements[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         // Move
         CMatrix(CMatrix&& m):sr(m.sr),sc(m.sc),elements(new float[sr*sc]()) {
