@@ -1,13 +1,15 @@
 #include "operations.hpp"
 #include <iostream>
+#include <random>
 
-CMatrix make_matrix()
+CMatrix make_matrix(const int rr, const int cc)
 {
-    const int rr = 3;
-    const int cc = 3;
     CMatrix m(rr, cc);
+    std::default_random_engine generator;
+    std::uniform_int_distribution<float> distribution(1,6);
+    auto dice = std::bind ( distribution, generator );
     for (int i = 0; i < rr * cc; i++) {
-        m.add(i);
+        m.add(dice());
     }
     return m;
 }
@@ -20,22 +22,20 @@ void prepare_next_row(CMatrix& A, int row)
     {
         return;
     }
-    else
+
+    int i = row + 1;
+    int num_row = A.getRowNum();
+    while (i < num_row)
     {
-        int i = row + 1;
-        int num_row = A.getRowNum();
-        while (i < num_row)
+        if (A.getElement(i, row) != 0)
         {
-            if (A.getElement(i, row) != 0)
-            {
-                // Swap
-                CMatrix current_row = A.extractRow(row);
-                A.setRow(row, A.extractRow(i));
-                A.setRow(i, current_row);
-                return;
-            }
-            i++;
+            // Swap
+            CMatrix current_row = A.extractRow(row);
+            A.setRow(row, A.extractRow(i));
+            A.setRow(i, current_row);
+            return;
         }
+        i++;
     }
 }
 
