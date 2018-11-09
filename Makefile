@@ -1,16 +1,28 @@
 prog: CMatrix.o operations.o tests.o main.o
-	g++ -std=c++11 -g -O0 -Wall -fPIC CMatrix.o operations.o tests.o main.o -o prog
+	g++ -std=c++11 -g -O0 -Wall -W,lsymbol -fPIC CMatrix.o operations.o tests.o main.o -o prog
+
+sym: CMatrixSym.o mainSym.o operationsSym.o
+	g++ -std=c++11 -g -O0 -Wall -W,lsymbol -fPIC operationsSym.o CMatrixSym.o mainSym.o -o sym
 
 CMatrix.o: CMatrix.cpp CMatrix.hpp Matrix.hpp
 	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
 
+CMatrixSym.o: CMatrixSym.cpp CMatrixSym.hpp
+	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
+
 operations.o: operations.cpp operations.hpp
+	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
+
+operationsSym.o: operationsSym.cpp operationsSym.hpp
 	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
 
 tests.o: tests.cpp
 	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
 
 main.o: main.cpp
+	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
+
+mainSym.o: mainSym.cpp
 	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
 
 .PHONY: clean
