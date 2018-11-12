@@ -6,7 +6,7 @@ CMatrixSym make_matrix(const int rr, const int cc)
 {
     CMatrixSym m(rr, cc);
     std::default_random_engine generator;
-    std::uniform_int_distribution<float> distribution(1, 999);
+    std::uniform_int_distribution<float> distribution(1, 20);
     auto dice = std::bind ( distribution, generator );
     for (int i = 0; i < rr * cc; i++) {
         m.add(Symbol<long>(dice(), dice()));
