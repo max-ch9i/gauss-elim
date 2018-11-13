@@ -60,7 +60,14 @@ void triangulate(CMatrix& A)
 
             float pivot_multiple = A.getElement(i, org_row) / pivot;
             CMatrix row_pivot_multiple = row_pivot * pivot_multiple;
+            // std::cout << "Multiple val: " << pivot_multiple << std::endl;
+            // std::cout << "Pivor: " << row_pivot << std::endl;
+            // std::cout << "Multiple: " << row_pivot_multiple << std::endl;
+            // std::cout << "A: " << r << std::endl;
             r -= row_pivot_multiple;
+            // std::cout << "B: " << r << std::endl;
+            // std::cout << std::endl<< std::endl<< std::endl;
+
 
             A.setRow(i, r);
         }

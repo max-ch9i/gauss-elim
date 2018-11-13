@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Matrix.hpp"
+#include <cmath>
 
 class CMatrix : public Matrix
 {
@@ -139,6 +140,10 @@ class CMatrix : public Matrix
                 elements[i] -= m.elements[i];
             }
         }
+        float mroundf(float a) const
+        {
+          return std::round(a * 1000) / 1000;
+        }
 
     private:
         int sr;
@@ -147,4 +152,12 @@ class CMatrix : public Matrix
         float* elements;
 };
 
-std::ostream& operator<<(std::ostream& os, const CMatrix& m);
+inline std::ostream& operator<<(std::ostream& os, const CMatrix& m) { 
+    for (int i = 0; i < m.getSize(); i++)
+    {
+        os << m.mroundf(m.getByIndex(i)) << " ";
+        if (i % m.getColNum() == m.getColNum() - 1)
+            os << std::endl;
+    }
+    return os;
+}
