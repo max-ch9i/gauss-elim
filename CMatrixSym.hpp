@@ -5,7 +5,7 @@
 class CMatrixSym
 {
     public:
-        CMatrixSym(int nr, int nc):sr(nr),sc(nc),elements(new Symbol<long>[sr*sc]())
+        CMatrixSym(int nr, int nc):sr(nr),sc(nc),elements(new Symbol<long long>[sr*sc]())
         {
             // std::cout << "CONSTRUCT " << std::endl;
         };
@@ -13,13 +13,13 @@ class CMatrixSym
             // std::cout << "DESTRUCT " << std::endl;
             delete[] elements;
         };
-        void add(const Symbol<long>& e) {
+        void add(const Symbol<long long>& e) {
           if(pointer + 1 <= sr*sc) elements[pointer++] = e;
         };
-        void add(Symbol<long>&& e) {
+        void add(Symbol<long long>&& e) {
           if(pointer + 1 <= sr*sc) elements[pointer++] = e;
         };
-        void add(Symbol<long>* es, int size) {
+        void add(Symbol<long long>* es, int size) {
             if(size <= sr*sc)
             {
                 for (int i = 0; i < size; i++)
@@ -28,12 +28,12 @@ class CMatrixSym
                 }
             }
         };
-        Symbol<long> getByIndex(int i) const { return elements[i]; };
-        Symbol<long> getElement(int r, int c) { return elements[sc * r + c]; };
+        Symbol<long long> getByIndex(int i) const { return elements[i]; };
+        Symbol<long long> getElement(int r, int c) { return elements[sc * r + c]; };
         int getSize() const { return sr*sc; };
         int getColNum() const { return sc; };
         int getRowNum() const { return sr; };
-        void setByIndex(int i, Symbol<long> e) { if(i < sr*sc) elements[i] = e; };
+        void setByIndex(int i, Symbol<long long> e) { if(i < sr*sc) elements[i] = e; };
         void setRow(int rn, const CMatrixSym& m) {
             if (m.sr > 1)
             {
@@ -75,7 +75,7 @@ class CMatrixSym
         }
 
         // Copy
-        CMatrixSym(const CMatrixSym& m):sr(m.sr),sc(m.sc),elements(new Symbol<long>[sr*sc]()) {
+        CMatrixSym(const CMatrixSym& m):sr(m.sr),sc(m.sc),elements(new Symbol<long long>[sr*sc]()) {
             for (int i = 0; i < sr*sc; i++) {
                 elements[i] = m.elements[i];
             }
@@ -85,14 +85,14 @@ class CMatrixSym
             sr = m.sr;
             sc = m.sc;
             delete[] elements;
-            elements = new Symbol<long>[sr*sc]();
+            elements = new Symbol<long long>[sr*sc]();
             for (int i = 0; i < sr*sc; i++) {
                 elements[i] = m.elements[i];
             }
             std::cout << "COPY ASSIGN" << std::endl;
             return *this;
         };
-        bool operator!=(const Symbol<long>* ar)
+        bool operator!=(const Symbol<long long>* ar)
         {
             for (int i = 0; i < sr*sc;i++)
             {
@@ -105,7 +105,7 @@ class CMatrixSym
         }
 
         // Move
-        CMatrixSym(CMatrixSym&& m):sr(m.sr),sc(m.sc),elements(new Symbol<long>[sr*sc]()) {
+        CMatrixSym(CMatrixSym&& m):sr(m.sr),sc(m.sc),elements(new Symbol<long long>[sr*sc]()) {
             elements = m.elements;
             m.elements = nullptr;
             std::cout << "MOVE CONST" << std::endl;
@@ -125,7 +125,7 @@ class CMatrixSym
         };
 
         // COPY
-        CMatrixSym operator*(const Symbol<long>& f)
+        CMatrixSym operator*(const Symbol<long long>& f)
         {
             CMatrixSym m(sr, sc);
             for (int i = 0; i < sr * sc; i++)
@@ -159,7 +159,15 @@ class CMatrixSym
         int sr;
         int sc;
         int pointer = 0;
-        Symbol<long>* elements;
+        Symbol<long long>* elements;
 };
 
-std::ostream& operator<<(std::ostream& os, const CMatrixSym& m);
+inline std::ostream& operator<<(std::ostream& os, const CMatrixSym& m) { 
+    for (int i = 0; i < m.getSize(); i++)
+    {
+        os << m.getByIndex(i) << " ";
+        if (i % m.getColNum() == m.getColNum() - 1)
+            os << std::endl;
+    }
+    return os;
+}

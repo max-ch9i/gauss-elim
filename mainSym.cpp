@@ -3,7 +3,7 @@
 
 int main()
 {
-  const int s = 3;
+  const int s = 8;
   CMatrixSym A = make_matrix(s, s+1);
   // A.sim();
   std::cout << A;

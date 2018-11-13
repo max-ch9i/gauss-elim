@@ -9,14 +9,14 @@ CMatrixSym make_matrix(const int rr, const int cc)
     std::uniform_int_distribution<float> distribution(1, 20);
     auto dice = std::bind ( distribution, generator );
     for (int i = 0; i < rr * cc; i++) {
-        m.add(Symbol<long>(dice(), dice()));
+        m.add(Symbol<long long>(dice(), dice()));
     }
     return m;
 }
 
 void prepare_next_row(CMatrixSym& A, int row)
 {
-    Symbol<long> pivot = A.getElement(row, row);
+    Symbol<long long> pivot = A.getElement(row, row);
 
     if (pivot.getNum() != 0)
     {
@@ -47,7 +47,7 @@ void triangulate(CMatrixSym& A)
         prepare_next_row(A, org_row);
 
         CMatrixSym row_pivot = A.extractRow(org_row);
-        Symbol<long> pivot = A.getElement(org_row, org_row);
+        Symbol<long long> pivot = A.getElement(org_row, org_row);
 
         if (pivot.getNum() == 0)
         {
@@ -58,7 +58,7 @@ void triangulate(CMatrixSym& A)
         {
             CMatrixSym r = A.extractRow(i);
 
-            Symbol<long> pivot_multiple = A.getElement(i, org_row) / pivot;
+            Symbol<long long> pivot_multiple = A.getElement(i, org_row) / pivot;
             CMatrixSym row_pivot_multiple = row_pivot * pivot_multiple;
             r -= row_pivot_multiple;
 
