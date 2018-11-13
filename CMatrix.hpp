@@ -80,14 +80,14 @@ class CMatrix : public Matrix
         };
         bool operator!=(const float* ar)
         {
-            for (int i = 0; i < sr*sc;i++)
+          for (int i = 0; i < sr*sc;i++)
+          {
+            if ((round(( ar[i] - elements[i]) * 10000) / 10000) != 0)
             {
-                if (ar[i] != elements[i])
-                {
-                    return true;
-                }
+              return true;
             }
-            return false;
+          }
+          return false;
         }
 
         // Move
@@ -152,7 +152,7 @@ class CMatrix : public Matrix
         float* elements;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const CMatrix& m) { 
+inline std::ostream& operator<<(std::ostream& os, const CMatrix& m) {
     for (int i = 0; i < m.getSize(); i++)
     {
         os << m.mroundf(m.getByIndex(i)) << " ";

@@ -200,6 +200,30 @@ void test_3x3_linear_dependence_fail_to_swap()
   }
 }
 
+void test_3x4_backwards_substitution()
+{
+  const int rr = 3;
+  const int cc = 4;
+
+  float ar[rr * cc] = { 5, 2, 3, 2
+                      , 1, 2, 6, 8
+                      , 2, 4, 6, 2
+                      };
+  float t[rr * 1] = { 0.25
+                     , -3.125
+                     , 2.33333};
+  CMatrix A(rr, cc);
+  A.add(ar, rr*cc);
+  triangulate(A);
+  CMatrix B = substitute(A);
+
+  if (B != t)
+  {
+    cout << test_failed << __FUNCTION__ << endl;
+    cout << B << endl;
+  }
+}
+
 void run_tests()
 {
   test_2x2();
@@ -210,4 +234,5 @@ void run_tests()
   test_4x4_zero_multiple();
   test_3x3_linear_dependence();
   test_3x3_linear_dependence_fail_to_swap();
+  test_3x4_backwards_substitution();
 }

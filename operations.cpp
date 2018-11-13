@@ -60,16 +60,55 @@ void triangulate(CMatrix& A)
 
             float pivot_multiple = A.getElement(i, org_row) / pivot;
             CMatrix row_pivot_multiple = row_pivot * pivot_multiple;
-            // std::cout << "Multiple val: " << pivot_multiple << std::endl;
-            // std::cout << "Pivor: " << row_pivot << std::endl;
-            // std::cout << "Multiple: " << row_pivot_multiple << std::endl;
-            // std::cout << "A: " << r << std::endl;
             r -= row_pivot_multiple;
-            // std::cout << "B: " << r << std::endl;
-            // std::cout << std::endl<< std::endl<< std::endl;
-
 
             A.setRow(i, r);
         }
     }
+}
+
+CMatrix substitute(CMatrix& A)
+{
+  int row_num = A.getRowNum();
+  int col_num = A.getColNum();
+  int last_row_idx = row_num - 1;
+  int last_col_idx = col_num - 1;
+
+  if (row_num != col_num - 1)
+  {
+    throw "Inappropriate matrix format";
+  }
+
+  // inverse order. Reordered later
+  std::vector<float> x_n;
+  for (int i = 0; i < row_num; i++)
+  {
+    // For every row:
+    // Get the sought term coefficient
+    float a = A.getElement(last_row_idx - i, last_col_idx - 1 - i);
+    // Get rhs
+    float b = A.getElement(last_row_idx - i, last_col_idx);
+    float sum = 0;
+
+    // Sum known terms in the row
+    for (int u = 0; u < i; u++)
+    {
+      float c = A.getElement(last_row_idx - i, last_col_idx - 1 - u);
+      float x_c = x_n[u];
+      sum += c * x_c;
+    }
+
+    float x = (b - sum) / a;
+    x_n.push_back(x);
+  }
+
+  CMatrix B(row_num, 1);
+  std::vector<float>::reverse_iterator it_x_n = x_n.rbegin();
+  std::vector<float>::reverse_iterator it_end_x_n = x_n.rend();
+  while(it_x_n != it_end_x_n)
+  {
+    B.add(*it_x_n);
+    it_x_n++;
+  }
+  return B;
 }
