@@ -1,6 +1,8 @@
 #include "operations.hpp"
+#include "parallelise.hpp"
 #include <iostream>
 #include <random>
+#include <vector>
 
 CMatrix make_matrix(const int rr, const int cc)
 {
@@ -66,6 +68,56 @@ void triangulate(CMatrix& A)
         }
     }
 }
+
+struct eliminate {
+  CMatrix* source;
+  int row_num;
+  CMatrix* row_pivot;
+  float pivot_multiple;
+  void operator()()
+  {
+    CMatrix row = (*source).extractRow(row_num);
+    CMatrix row_pivot_multiple = *row_pivot * pivot_multiple;
+    row -= row_pivot_multiple;
+    (*source).setRow(row_num, row);
+  }
+};
+
+void ptriangulate(CMatrix& A, int t)
+{
+  parallelise<eliminate> p(t);
+
+  int num_rows = A.getRowNum();
+  for (int org_row = 0; org_row < num_rows - 1; org_row++)
+  {
+    prepare_next_row(A, org_row);
+
+    CMatrix row_pivot = A.extractRow(org_row);
+    float pivot = A.getElement(org_row, org_row);
+
+    if (pivot == 0)
+    {
+      return;
+    }
+
+    for (int i = org_row + 1; i < num_rows; i++)
+    {
+      p.add_work(eliminate{&A, i, &row_pivot, A.getElement(i, org_row) / pivot});
+    }
+    p.start();
+  }
+}
+
+/*
+    std::vector<eliminate> elim_procs;
+        for (int vi = 0, i = org_row + 1; i < num_rows; vi++, i++)
+            {
+                  elim_procs.push_back(eliminate{A.extractRow(i), A, i, row_pivot, A.getElement(i, org_row) / pivot});
+                        p.add_work(&elim_procs[vi]);
+                            }
+                                std::cout << "AAAAA";
+                                    p.start();
+*/
 
 CMatrix substitute(CMatrix& A)
 {

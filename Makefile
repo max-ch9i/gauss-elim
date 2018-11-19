@@ -4,7 +4,7 @@ prog: operations.o tests.o main.o
 sym: mainSym.o operationsSym.o
 	g++ -std=c++11 -g -O0 -Wall -fPIC operationsSym.o mainSym.o -o sym
 
-operations.o: operations.cpp operations.hpp CMatrix.hpp Matrix.hpp
+operations.o: operations.cpp operations.hpp CMatrix.hpp Matrix.hpp parallelise.hpp stack.hpp
 	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
 
 operationsSym.o: operationsSym.cpp operationsSym.hpp
