@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <string>
 
 CMatrix make_matrix(const int rr, const int cc)
 {
@@ -152,4 +153,20 @@ CMatrix substitute(CMatrix& A)
     it_x_n++;
   }
   return B;
+}
+
+void sol_print(const CMatrix& A)
+{
+  std::string sol;
+  int s = A.getSize();
+  for (int i = 0; i < s; i++)
+  {
+    sol += std::string("x^(") + std::to_string(s-i-1) + ") * " + std::to_string(A.getByIndex(i));
+    if (i != s -1)
+    {
+      sol += " + ";
+    }
+  }
+  sol += "0";
+  std::cout << sol << std::endl;
 }
