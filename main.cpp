@@ -9,7 +9,7 @@ void run_tests();
 int main()
 {
     // run_tests();
-    const int s = 2000;
+    const int s = 400;
     CMatrix D = make_matrix(s, s+1);
 
     CMatrix P = D;
@@ -20,10 +20,8 @@ int main()
 
     cout <<chrono::duration <double, milli> (end - start).count()  << endl;
 
-    P = D;
-
     start = chrono::steady_clock::now();
-    ptriangulate(P, 8);
+    ptriangulate(D, 8);
     end = chrono::steady_clock::now();
 
     // cout << A << endl;

@@ -1,24 +1,22 @@
-prog: operations.o tests.o main.o
-	g++ -std=c++11 -g -O0 -Wall -fPIC operations.o tests.o main.o -o prog
+LINK.o = $(CXX) $(CXXFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+CXXFLAGS = -std=c++11 -g -O0 -Wall -fPIC
 
-sym: mainSym.o operationsSym.o
-	g++ -std=c++11 -g -O0 -Wall -fPIC operationsSym.o mainSym.o -o sym
+SOURCES = operations.cpp \
+					tests.cpp \
+					main.cpp \
+					operationsSym.cpp \
+					mainSym.cpp
 
-operations.o: operations.cpp operations.hpp CMatrix.hpp Matrix.hpp parallelise.hpp stack.hpp
-	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
-
-operationsSym.o: operationsSym.cpp operationsSym.hpp
-	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
-
-tests.o: tests.cpp CMatrix.hpp Matrix.hpp
-	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
-
-main.o: main.cpp CMatrix.hpp Matrix.hpp
-	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
-
-mainSym.o: mainSym.cpp
-	g++ -std=c++11 -c -g -O0 -Wall -fPIC $<
+main: operations.o tests.o main.o
+mainSym: operationsSym.o mainSym.o
 
 .PHONY: clean
 clean:
-	rm *.o *.a *.so
+	rm *.o *.d
+
+include $(subst .cpp,.d,$(SOURCES))
+
+%.d: %.cpp
+	$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$

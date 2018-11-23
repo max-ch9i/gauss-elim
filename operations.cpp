@@ -108,17 +108,6 @@ void ptriangulate(CMatrix& A, int t)
   }
 }
 
-/*
-    std::vector<eliminate> elim_procs;
-        for (int vi = 0, i = org_row + 1; i < num_rows; vi++, i++)
-            {
-                  elim_procs.push_back(eliminate{A.extractRow(i), A, i, row_pivot, A.getElement(i, org_row) / pivot});
-                        p.add_work(&elim_procs[vi]);
-                            }
-                                std::cout << "AAAAA";
-                                    p.start();
-*/
-
 CMatrix substitute(CMatrix& A)
 {
   int row_num = A.getRowNum();
